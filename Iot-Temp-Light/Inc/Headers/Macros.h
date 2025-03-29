@@ -1,10 +1,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 /*
-PB10 (TX):
-Configúrala como salida de función alternativa (Alternate Function Push-Pull) con velocidad máxima (por ejemplo, 50MHz).
-PB11 (RX):
-Configúrala como entrada flotante (Input Floating) o con resistencia de pull-up, según tus necesidades.
 
 0x4001 0800 - 0x4001 0BFF GPIO Port A Bus-- APB2
 0x4001 0C00 - 0x4001 0FFF GPIO Port B Bus-- APB2
