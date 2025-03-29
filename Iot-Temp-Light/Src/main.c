@@ -22,5 +22,5 @@
 
 int main(void)
 {
-
+uint32_t variable = 0;
 }
