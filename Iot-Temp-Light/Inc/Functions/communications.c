@@ -26,7 +26,6 @@ void uart_init (void){
 	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
 
-
 	/*Definicion de BaudRate USARTDIV = PCLK/(16 * BaudRate)
 	 BaudRate= 115200	PCLK= 8MHz
 	 USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.3403
