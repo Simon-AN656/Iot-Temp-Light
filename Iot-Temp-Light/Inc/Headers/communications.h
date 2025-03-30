@@ -2,5 +2,8 @@
 #define COMMUNICATIONS_H
 
 void uart_init (void);
+void comunicate_process (void);
+void recive_data_ok (void);
+void recive_data_error (void);
 
 #endif

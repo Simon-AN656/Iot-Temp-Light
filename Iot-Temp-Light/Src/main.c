@@ -17,11 +17,27 @@
  */
 
 #include <stdint.h>
+#include "Headers/Macros.h"
+#include "Headers/communications.h"
+#include "Headers/delay_functions.h"
 
 
 
 int main(void)
 {
+	uart_init();
+
+	while(1){
+
+		comunicate_process();
+		delay_ms(50);
+		recive_data_ok();
+		delay_ms(50);
+		recive_data_error();
+		delay_ms(50);
+
+
+	}
 
 
 }

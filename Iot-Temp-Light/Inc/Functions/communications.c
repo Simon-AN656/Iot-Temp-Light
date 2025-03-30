@@ -7,6 +7,7 @@ Configúrala como entrada flotante (Input Floating) o con resistencia de pull-up
 
 #include "Headers/communications.h"
 #include "Headers/Macros.h"
+#include "Headers/delay_functions.h"
 
 
 //Funcion para activar UART3
@@ -19,6 +20,13 @@ void uart_init (void){
 	//Activacion de pines PB10 y PB11
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFU << 8);
 	GPIOx_CRH(GPIOB_BASE) |= (0x4BU << 8);
+	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
+	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
+	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
+	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
+	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
+
+
 
 	/*Definicion de BaudRate USARTDIV = PCLK/(16 * BaudRate)
 	 BaudRate= 115200	PCLK= 8MHz
@@ -35,3 +43,29 @@ void uart_init (void){
 
 
 }
+
+void comunicate_process (void){
+
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 15);
+	delay_ms(100);
+	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 15);
+
+}
+
+void recive_data_ok (void){
+
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 14);
+	delay_ms(100);
+	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 14);
+
+}
+
+void recive_data_error (void){
+
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 13);
+	delay_ms(100);
+	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 13);
+
+}
+
+

@@ -20,6 +20,7 @@
 #define RCC_APB1ENR_OFFSET	0x1CU
 #define RCC_APB2ENR_OFFSET 	0x18U
 #define CRH_OFFSET 			0x04U
+#define CRL_OFFSET			0x00U
 #define ODR_OFFSET			0x0CU
 #define IDR_OFFSET			0x08U
 #define USART_SR_OFFSET 	0x00U
@@ -31,6 +32,7 @@
 #define RCC_APB1ENR 		(*(volatile uint32_t*)(RCC_BASE + RCC_APB1ENR_OFFSET))
 #define RCC_APB2ENR 		(*(volatile uint32_t*)(RCC_BASE + RCC_APB2ENR_OFFSET))
 #define GPIOx_CRH(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRH_OFFSET))
+#define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
 #define GPIOx_ODR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + ODR_OFFSET))
 #define GPIOx_IDR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + IDR_OFFSET))
 #define USARTx_SR(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_SR_OFFSET))
