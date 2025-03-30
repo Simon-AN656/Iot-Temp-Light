@@ -13,6 +13,7 @@
 
 //Definicion de mascros de las bases de los  registros
 #define GPIOB_BASE 		0x40010C00U
+#define GPIOC_BASE 		0x40011000U
 #define USART3_BASE 	0x40004800U
 #define RCC_BASE 		0x40021000U
 

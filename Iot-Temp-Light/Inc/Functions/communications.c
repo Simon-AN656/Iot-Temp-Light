@@ -15,7 +15,7 @@ void uart_init (void){
 
 	//Activacion de RCC USART y GPIO
 	RCC_APB1ENR |= (1U << 18);
-	RCC_APB2ENR |= (1U << 3);
+	RCC_APB2ENR |= (0x3U << 3);
 
 	//Activacion de pines PB10 y PB11
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFU << 8);
@@ -25,7 +25,6 @@ void uart_init (void){
 	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
 	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
-
 
 
 	/*Definicion de BaudRate USARTDIV = PCLK/(16 * BaudRate)
@@ -41,6 +40,13 @@ void uart_init (void){
 	USARTx_CR1(USART3_BASE) = 0x00000000U;
 	USARTx_CR1(USART3_BASE) |= (1U << 13) | (0x3U << 2);
 
+	//Se finalizo la iniciacion de UART
+	delay_ms(100);
+	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
+	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
+	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
+	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
+	delay_ms(100);
 
 }
 
