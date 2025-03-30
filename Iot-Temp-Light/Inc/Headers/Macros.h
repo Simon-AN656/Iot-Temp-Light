@@ -1,5 +1,6 @@
 #ifndef MACROS_H
 #define MACROS_H
+#include <stdint.h>
 /*
 
 0x4001 0800 - 0x4001 0BFF GPIO Port A Bus-- APB2
