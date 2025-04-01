@@ -11,6 +11,7 @@
 0x4000 4800 - 0x4000 4BFF USART3
  */
 
+
 //Definicion de mascros de las bases de los  registros
 #define GPIOB_BASE 		0x40010C00U
 #define GPIOC_BASE 		0x40011000U
