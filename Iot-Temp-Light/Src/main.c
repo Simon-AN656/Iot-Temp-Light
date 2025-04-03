@@ -24,96 +24,44 @@
 #include <string.h>
 
 // Define el comando AT
-const char* command = "AT\r\n";
-const char* reset = "AT+RST\r\n";
-const char* mode = "AT+CWMODE=1\r\n";
-const char* join = "AT+CWJAP=\"SecondarySimon\",\"Continental1\"\r\n";
+const char* command_init = "AT\r\n";
+uint8_t button_pressed = 0;
 
 
 
 int main(void)
 {
+
+	char response[100];
     // Inicializar la UART
     uart_init();
     delay_ms(50);
     comunicate_process();
     delay_ms(50);
 
-    // 1. Enviar comando de reset para reiniciar el ESP8266
-    transmit_string(command);
-    comunicate_process();
-    delay_ms(50);  // Tiempo extra para que el módulo se reinicie
-
-    char response[100];
-
-    receive_string(response, sizeof(response));
-    delay_ms(100);
-    comunicate_process();
-
-    if (strcmp(response, "OK\r\n") == 0) {
-
-        recive_data_ok();
-        // Indica que el reset fue exitoso
-    } else {
-
-        recive_data_error();
-        // Aquí podrías reintentar el reset o detener la ejecución
-    }
-
-    delay_ms(100);
-
-    // 2. Configurar el modo WiFi (modo estación)
-    transmit_string(mode);
-    delay_ms(100);
-    receive_string(response, sizeof(response));
-
-    if (strcmp(response, "OK\r\n") == 0) {
-
-    	recive_data_ok();  // Modo configurado correctamente
-
-    } else {
-
-    	recive_data_error();
-
-    }
-
-    delay_ms(100);
-
-    // 3. Unirse a la red WiFi
-    transmit_string(join);
-    delay_ms(3000);  // Tiempo para que el módulo intente conectarse
-    receive_string(response, sizeof(response));
-
-    // Se puede usar strstr para buscar "WIFI CONNECTED" o "OK"
-    if (strstr(response, "WIFI CONNECTED") != NULL) {
-
-    	recive_data_ok();  // Conexión exitosa
-
-    	for(int i = 0; i < 5; i++){
-
-    		comunicate_process();
-
-    	}
-    } else {
-
-    	recive_data_error();
-
-    	// Aquí podrías reintentar el comando o gestionar el error
-    }
-
-    // Aquí el módulo ya debería estar conectado a la red WiFi
-    // Continúa con el resto de la aplicación
-
     while(1) {
-        // Por ejemplo, envía el comando AT periódicamente y verifica la respuesta
-        transmit_string(command);
-        delay_ms(100);
-        receive_string(response, sizeof(response));
-        if (strcmp(response, "OK\r\n") == 0) {
-            recive_data_ok();
-        } else {
-            recive_data_error();
+            // Detectar flanco de subida (botón presionado)
+            if((GPIOx_IDR(GPIOB_BASE) & (1U << 1)) && !button_pressed) {
+                button_pressed = 1;  // Marcar que el botón fue presionado
+
+                delay_ms(50); // Pequeño debounce
+                comunicate_process();
+                transmit_string(command_init);
+                delay_ms(50);
+
+                receive_string(response, sizeof(response));
+
+                if (strcmp(response, "OK") == 0 || strcmp(response, "OK\r\n") == 0) {
+                    recive_data_ok();  // Indica que la comunicación fue exitosa
+                } else {
+                    recive_data_error();  // Indica error
+                }
+            }
+
+            // Detectar flanco de bajada (botón liberado)
+            if(!(GPIOx_IDR(GPIOB_BASE) & (1U << 1))) {
+                button_pressed = 0;  // Permitir nueva detección
         }
-        delay_ms(1000);
     }
 }
+

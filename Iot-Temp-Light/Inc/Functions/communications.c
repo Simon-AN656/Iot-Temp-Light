@@ -23,20 +23,20 @@ void uart_init (void){
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
 	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
 	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
-	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
-	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
+	GPIOx_CRL(GPIOB_BASE) |= (0x8U << 4);
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
 
 	/*Definicion de BaudRate USARTDIV = PCLK/(16 * BaudRate)
 	 BaudRate= 115200	PCLK= 8MHz
-	 USARTDIV =  8MHz/(16 * 115200) = 36MHz/1843200 = 19.5313
-	 DIV_Mantissa =  19
-	 DIV_Fraction = .5313 * 16 = 8.50 = 8 (Redondeado)
-	 USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣5 = 0x45
+	 USARTDIV =  36MHz/(16 * 9600) = 36MHz/153600 = 234.375
+	 DIV_Mantissa =  234
+	 DIV_Fraction = .375 * 16 =
+	 USART_BRR = (Mantisa << 4)∣Fraccion = (0xEA << 4)∣6
 	 */
-	USARTx_BRR(USART3_BASE) = (0x13U << 4)|8U;
+	USARTx_BRR(USART3_BASE) = (0xEA << 4)|6;
 
 	//Configuracion de Control register 1
-	USARTx_CR1(USART3_BASE) = 0x00000000U;
+	//USARTx_CR1(USART3_BASE) = 0x00000000U;
 	USARTx_CR1(USART3_BASE) |= (1U << 13) | (0x3U << 2);
 
 	//Se finalizo la iniciacion de UART
@@ -45,7 +45,21 @@ void uart_init (void){
 	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
 	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
 	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
+	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
+	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
+	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
+
 	delay_ms(100);
+
+}
+
+void press_button (int press){
+
+	const char* led_on = "ON\r\n";
+
+	if(GPIOx_IDR(GPIOB_BASE) & (1 << 10)){
+		transmit_string(led_on);
+	}
 
 }
 
@@ -108,5 +122,6 @@ void recive_data_error (void){
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 13);
 
 }
+
 
 
