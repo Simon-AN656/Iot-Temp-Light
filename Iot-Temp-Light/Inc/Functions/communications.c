@@ -18,10 +18,10 @@ void uart_init (void){
 	RCC_APB2ENR |= (0x3U << 3);
 
 	//Pin configuration PB10 ouput-push-pull and PB11 floating-input
-	//AFIO_MAPR |= (00 << 4);
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFU << 8);
 	GPIOx_CRH(GPIOB_BASE) |= (0x4BU << 8);
 
+	//
 	USARTx_CR2(USART3_BASE) &= ~(0x3U << 12);
 
 	/*BaudRate setup USARTDIV = PCLK/(16 * BaudRate)
@@ -30,6 +30,7 @@ void uart_init (void){
 	 DIV_Mantissa =  4
 	 DIV_Fraction = .34 * 16 = 5.44 = 6
 	 USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6
+	 NOTE: Default HSI 8MHz
 	 */
 	USARTx_BRR(USART3_BASE) = (4 << 4) | 6;
 
@@ -41,22 +42,26 @@ void uart_init (void){
 
 void init_system (void){
 
+	//Se limpian y configuran bits 20:31 para pines PB13, PB14 y PB15
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
 	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
-	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
+	//Se limpian y configuran bits 20:23 para pin PC13
 	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
 	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
+	//Se ponen en 1 pin PC13
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
 	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
 	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
 }
 
 void button_enable (void){
 
-	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
-	GPIOx_CRL(GPIOB_BASE) |= (0x8U << 4);
+	//Limpieza y configuarcin de bits 4:7 para PB1
 	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
 	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
+	//Configuracion de ODR en estado alto
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
 
 }
 
