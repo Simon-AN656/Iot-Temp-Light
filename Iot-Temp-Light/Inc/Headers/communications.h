@@ -2,6 +2,8 @@
 #define COMMUNICATIONS_H
 
 void uart_init (void);
+void button_enable (void);
+void init_system (void);
 void transmit_string(const char* str);
 void receive_string(char* buffer, int length);
 void comunicate_process (void);

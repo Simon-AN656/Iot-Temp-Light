@@ -13,53 +13,50 @@ Configúrala como entrada flotante (Input Floating) o con resistencia de pull-up
 //Funcion para activar UART3
 void uart_init (void){
 
-	//Activacion de RCC USART y GPIO
+	//Clock enable bus RCC USART and GPIO
 	RCC_APB1ENR |= (1U << 18);
 	RCC_APB2ENR |= (0x3U << 3);
 
-	//Activacion de pines PB10 y PB11
+	//Pin configuration PB10 ouput-push-pull and PB11 floating-input
+	//AFIO_MAPR |= (00 << 4);
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFU << 8);
 	GPIOx_CRH(GPIOB_BASE) |= (0x4BU << 8);
-	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
-	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
-	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
-	GPIOx_CRL(GPIOB_BASE) |= (0x8U << 4);
-	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
 
-	/*Definicion de BaudRate USARTDIV = PCLK/(16 * BaudRate)
+	USARTx_CR2(USART3_BASE) &= ~(0x3U << 12);
+
+	/*BaudRate setup USARTDIV = PCLK/(16 * BaudRate)
 	 BaudRate= 115200	PCLK= 8MHz
-	 USARTDIV =  36MHz/(16 * 9600) = 36MHz/153600 = 234.375
-	 DIV_Mantissa =  234
-	 DIV_Fraction = .375 * 16 =
-	 USART_BRR = (Mantisa << 4)∣Fraccion = (0xEA << 4)∣6
+	 USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.34
+	 DIV_Mantissa =  4
+	 DIV_Fraction = .34 * 16 = 5.44 = 6
+	 USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6
 	 */
-	USARTx_BRR(USART3_BASE) = (0xEA << 4)|6;
+	USARTx_BRR(USART3_BASE) = (4 << 4) | 6;
 
-	//Configuracion de Control register 1
-	//USARTx_CR1(USART3_BASE) = 0x00000000U;
+	//Control register 1 configuration
+	USARTx_CR1(USART3_BASE) = 0x0000;
 	USARTx_CR1(USART3_BASE) |= (1U << 13) | (0x3U << 2);
 
-	//Se finalizo la iniciacion de UART
-	delay_ms(100);
+}
+
+void init_system (void){
+
+	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
+	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
 	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
 	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
 	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
 	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
+}
+
+void button_enable (void){
+
+	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
+	GPIOx_CRL(GPIOB_BASE) |= (0x8U << 4);
 	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
 	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
-
-	delay_ms(100);
-
-}
-
-void press_button (int press){
-
-	const char* led_on = "ON\r\n";
-
-	if(GPIOx_IDR(GPIOB_BASE) & (1 << 10)){
-		transmit_string(led_on);
-	}
 
 }
 
