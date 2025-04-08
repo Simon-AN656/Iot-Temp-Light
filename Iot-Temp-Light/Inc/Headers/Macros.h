@@ -17,6 +17,7 @@
 #define GPIOC_BASE 		0x40011000U
 #define USART3_BASE 	0x40004800U
 #define RCC_BASE 		0x40021000U
+#define AFIO_BASE		0x40010000U
 
 //Definicion de macros para offset de los registros
 #define RCC_APB1ENR_OFFSET	0x1CU
@@ -29,6 +30,8 @@
 #define USART_DR_OFFSET		0x04U
 #define USART_BRR_OFFSET	0x08U
 #define USART_CR1_OFFSET	0x0CU
+#define USART_CR2_OFFSET	0x10U
+#define AFIO_MAPR_OFFSET  	0x04U
 
 //Definicion de las macros para la activacion de los registros base + offsets
 #define RCC_APB1ENR 		(*(volatile uint32_t*)(RCC_BASE + RCC_APB1ENR_OFFSET))
@@ -41,6 +44,8 @@
 #define USARTx_DR(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_DR_OFFSET))
 #define USARTx_BRR(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_BRR_OFFSET))
 #define USARTx_CR1(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_CR1_OFFSET))
+#define USARTx_CR2(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_CR2_OFFSET))
+#define AFIO_MAPR 			(*(volatile uint32_t*)(AFIO_BASE + AFIO_MAPR_OFFSET))
 
 
 #endif
