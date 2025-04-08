@@ -25,6 +25,9 @@
 
 // Define el comando AT
 const char* command_init = "AT\r\n";
+const char* set_name = "AT+NAMEMyFirstTest\r\n";
+const char* set_pin= "AT+PIN4321\r\n";
+
 uint8_t button_pressed = 0;
 
 
@@ -35,6 +38,8 @@ int main(void)
 	char response[100];
     // Inicializar la UART
     uart_init();
+    init_system();
+    button_enable();
     delay_ms(50);
     comunicate_process();
     delay_ms(50);
@@ -45,8 +50,12 @@ int main(void)
                 button_pressed = 1;  // Marcar que el botón fue presionado
 
                 delay_ms(50); // Pequeño debounce
-                comunicate_process();
-                transmit_string(command_init);
+                transmit_string(set_name);
+                recive_data_ok();
+                delay_ms(50);
+                delay_ms(50); // Pequeño debounce
+                transmit_string(set_pin);
+                recive_data_ok();
                 delay_ms(50);
 
                 receive_string(response, sizeof(response));
