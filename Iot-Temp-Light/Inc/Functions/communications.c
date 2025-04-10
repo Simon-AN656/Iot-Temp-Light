@@ -20,23 +20,26 @@ void uart_init (void){
 	//
 	USARTx_CR2(USART3_BASE) &= ~(0x3U << 12);
 
-	/*BaudRate setup USARTDIV = PCLK/(16 * BaudRate)
-	 BaudRate= 115200	PCLK= 8MHz
-	 USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.34
-	 DIV_Mantissa =  4
-	 DIV_Fraction = .34 * 16 = 5.44 = 6
-	 USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6
-	 NOTE: Default HSI 8MHz
-	 */
+/************************************************************
+* BaudRate setup USARTDIV = PCLK/(16 * BaudRate)			*
+* BaudRate= 115200	PCLK= 8MHz								*
+* USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.34		*
+* DIV_Mantissa =  4											*
+* DIV_Fraction = .34 * 16 = 5.44 = 6						*
+* USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6			*
+* NOTE: Default HSI 8MHz									*
+* **********************************************************/
+
 	USARTx_BRR(USART3_BASE) = (4 << 4) | 6;
 
 	//Control register 1 configuration
 	USARTx_CR1(USART3_BASE) = 0x0000;
 	USARTx_CR1(USART3_BASE) |= (1U << 13) | (0x3U << 2);
-	(void) USARTx_DR(USART3_BASE);  // Realiza la lectura para limpiar RXNE si estuviera activo
-
+	// Realiza la lectura para limpiar RXNE si estuviera activo
+	(void) USARTx_DR(USART3_BASE);
+	//Se habilita el bit RXNIEIE para la interrupcion de RX
 	USARTx_CR1(USART3_BASE) |= (1U << 5);
-
+	//Se configura la prioridad y habilita el NVIC para la interrupcion de USART3
 	NVIC_SET_PRIORITY(39, 3);
 	NVIC_ISER1 |= (1U << 7);
 
@@ -48,12 +51,12 @@ void init_system (void){
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
 	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
 	//Se limpian y configuran bits 20:23 para pin PC13
-	//GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
-	//GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
+	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
+	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
 	//Se ponen en 1 pin PC13
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
-	//GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
-	//GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
+	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
+	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
 }
 
 void button_enable (void){
