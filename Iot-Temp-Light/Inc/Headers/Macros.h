@@ -18,6 +18,9 @@
 #define USART3_BASE 	0x40004800U
 #define RCC_BASE 		0x40021000U
 #define AFIO_BASE		0x40010000U
+#define NVIC_BASE		0xE000E100U
+
+
 
 //Definicion de macros para offset de los registros
 #define RCC_APB1ENR_OFFSET	0x1CU
@@ -32,6 +35,19 @@
 #define USART_CR1_OFFSET	0x0CU
 #define USART_CR2_OFFSET	0x10U
 #define AFIO_MAPR_OFFSET  	0x04U
+#define NVIC_ISER1_OFFSET	0x04U
+
+//Macros para NVIC
+#define NVIC_ISER1 (*(volatile uint32_t*)(NVIC_BASE + NVIC_ISER1_OFFSET))
+#define NVIC_IPR_BASE  0xE000E400
+
+// Macro para establecer la prioridad de una interrupción (IRQ)
+// IRQn: número de la interrupción (p.ej. 39)
+// PRIORITY: valor de prioridad (0 a 15, donde menor valor es mayor prioridad)
+// Los 4 bits más altos de cada byte son efectivos, entonces se hace: PRIORITY << 4
+#define NVIC_SET_PRIORITY(IRQn, PRIORITY)  \
+    (*(volatile uint8_t*)(NVIC_IPR_BASE + ((IRQn) & 0xFF)) = ((PRIORITY & 0x0F) << 4))
+
 
 //Definicion de las macros para la activacion de los registros base + offsets
 #define RCC_APB1ENR 		(*(volatile uint32_t*)(RCC_BASE + RCC_APB1ENR_OFFSET))
