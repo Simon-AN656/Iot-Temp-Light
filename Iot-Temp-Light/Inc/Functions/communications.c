@@ -13,10 +13,6 @@ Configúrala como entrada flotante (Input Floating) o con resistencia de pull-up
 //Funcion para activar UART3
 void uart_init (void){
 
-	//Clock enable bus RCC USART and GPIO
-	RCC_APB1ENR |= (1U << 18);
-	RCC_APB2ENR |= (0x3U << 3);
-
 	//Pin configuration PB10 ouput-push-pull and PB11 floating-input
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFU << 8);
 	GPIOx_CRH(GPIOB_BASE) |= (0x4BU << 8);
@@ -37,6 +33,12 @@ void uart_init (void){
 	//Control register 1 configuration
 	USARTx_CR1(USART3_BASE) = 0x0000;
 	USARTx_CR1(USART3_BASE) |= (1U << 13) | (0x3U << 2);
+	(void) USARTx_DR(USART3_BASE);  // Realiza la lectura para limpiar RXNE si estuviera activo
+
+	USARTx_CR1(USART3_BASE) |= (1U << 5);
+
+	NVIC_SET_PRIORITY(39, 3);
+	NVIC_ISER1 |= (1U << 7);
 
 }
 
@@ -46,12 +48,12 @@ void init_system (void){
 	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
 	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
 	//Se limpian y configuran bits 20:23 para pin PC13
-	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
-	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
+	//GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
+	//GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
 	//Se ponen en 1 pin PC13
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
-	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
-	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
+	//GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
+	//GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
 }
 
 void button_enable (void){
@@ -65,7 +67,28 @@ void button_enable (void){
 
 }
 
-// Función para enviar un string a través de UART
+void USART3_IRQHandler(void){
+
+
+	if(USARTx_SR(USART3_BASE) & (1U << 5)){
+
+		char dato = USARTx_DR(USART3_BASE);
+		if(dato == 'G'){
+			transmit_string("OK es la G\r\n");
+			recive_data_ok();
+		}else if(dato == 'R'){
+			transmit_string("OK es la R\r\n");
+			recive_data_error();
+		}else if(dato == 'B'){
+			transmit_string("OK es la B\r\n");
+			comunicate_process();
+		}
+
+	}
+
+}
+
+//Función para enviar un string a través de UART
 void transmit_string(const char* str) {
     while (*str) {
         // Enviar cada caracter del string
@@ -75,7 +98,7 @@ void transmit_string(const char* str) {
 }
 
 // Función para recibir un string a través de UART con timeout
-void receive_string(char* buffer, int length) {
+/*void receive_string(char* buffer, int length) {
     int i = 0;
     int timeout = 10000;  // Tiempo de espera máximo para recibir datos (puedes ajustar este valor)
 
@@ -97,7 +120,7 @@ void receive_string(char* buffer, int length) {
         }
     }
     buffer[i] = '\0';  // Asegurarse de que el string esté terminado en '\0'
-}
+}*/
 
 
 
