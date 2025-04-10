@@ -34,43 +34,45 @@ uint8_t button_pressed = 0;
 
 int main(void)
 {
+	//Clock enable bus RCC USART and GPIO
+	RCC_APB1ENR |= (1U << 18);
+	RCC_APB2ENR |= (0x3U << 3);
+	//Global-interrupt enable
+	//__asm("CPSIE I");  // Habilitar interrupciones globales (setea el bit I del xPSR)
+	    //__asm volatile ("cpsie i");
 
-	char response[100];
     // Inicializar la UART
+	init_system();
+	delay_ms(50);
+	comunicate_process();
+	delay_ms(50);
     uart_init();
-    init_system();
     button_enable();
-    delay_ms(50);
-    comunicate_process();
-    delay_ms(50);
+
 
     while(1) {
+
             // Detectar flanco de subida (botón presionado)
             if((GPIOx_IDR(GPIOB_BASE) & (1U << 1)) && !button_pressed) {
                 button_pressed = 1;  // Marcar que el botón fue presionado
 
                 delay_ms(50); // Pequeño debounce
-                transmit_string(set_name);
+                //transmit_string(set_name);
                 recive_data_ok();
                 delay_ms(50);
-                delay_ms(50); // Pequeño debounce
-                transmit_string(set_pin);
+                //elay_ms(50); // Pequeño debounce
+                //transmit_string(set_pin);
                 recive_data_ok();
                 delay_ms(50);
 
-                receive_string(response, sizeof(response));
 
-                if (strcmp(response, "OK") == 0 || strcmp(response, "OK\r\n") == 0) {
-                    recive_data_ok();  // Indica que la comunicación fue exitosa
-                } else {
-                    recive_data_error();  // Indica error
-                }
             }
 
             // Detectar flanco de bajada (botón liberado)
             if(!(GPIOx_IDR(GPIOB_BASE) & (1U << 1))) {
                 button_pressed = 0;  // Permitir nueva detección
         }
+
     }
 }
 
