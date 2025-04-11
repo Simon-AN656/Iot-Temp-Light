@@ -1,14 +1,10 @@
-/*
- PB10 (TX):
-Configúrala como salida de función alternativa (Alternate Function Push-Pull) con velocidad máxima (por ejemplo, 50MHz).
-PB11 (RX):
-Configúrala como entrada flotante (Input Floating) o con resistencia de pull-up, según tus necesidades.
- */
-
 #include "Headers/communications.h"
 #include "Headers/Macros.h"
 #include "Headers/delay_functions.h"
+#include <string.h>
 
+volatile char rx_buffer[64];   // Definición del buffer de recepción
+volatile uint8_t rx_index = 0; // Definición del índice de recepción
 
 //Funcion para activar UART3
 void uart_init (void){
@@ -21,13 +17,13 @@ void uart_init (void){
 	USARTx_CR2(USART3_BASE) &= ~(0x3U << 12);
 
 /************************************************************
-* BaudRate setup USARTDIV = PCLK/(16 * BaudRate)			*
-* BaudRate= 115200	PCLK= 8MHz								*
-* USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.34		*
-* DIV_Mantissa =  4											*
-* DIV_Fraction = .34 * 16 = 5.44 = 6						*
-* USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6			*
-* NOTE: Default HSI 8MHz									*
+* BaudRate setup USARTDIV = PCLK/(16 * BaudRate)
+* BaudRate= 115200	PCLK= 8MHz
+* USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.34
+* DIV_Mantissa =  4
+* DIV_Fraction = .34 * 16 = 5.44 = 6
+* USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6
+* NOTE: Default HSI 8MHz
 * **********************************************************/
 
 	USARTx_BRR(USART3_BASE) = (4 << 4) | 6;
@@ -70,26 +66,47 @@ void button_enable (void){
 
 }
 
-void USART3_IRQHandler(void){
+void USART3_IRQHandler(void)
+{
+    if (USARTx_SR(USART3_BASE) & (1U << 5)) // RXNE
+    {
+        char dato = USARTx_DR(USART3_BASE);
 
+        // Si el dato es terminador y no hay nada en el buffer, descartar
+        if ((dato == '\r' || dato == '\n') && (rx_index == 0))
+            {
+        // No hacer nada, ya que es un terminador extra
+           return;
+           }
 
-	if(USARTx_SR(USART3_BASE) & (1U << 5)){
+        if (dato == '\r' || dato == '\n') {
+            rx_buffer[rx_index] = '\0';
 
-		char dato = USARTx_DR(USART3_BASE);
-		if(dato == 'G'){
-			transmit_string("OK es la G\r\n");
-			recive_data_ok();
-		}else if(dato == 'R'){
-			transmit_string("OK es la R\r\n");
-			recive_data_error();
-		}else if(dato == 'B'){
-			transmit_string("OK es la B\r\n");
-			comunicate_process();
-		}
+            // Procesar comando directamente:
+            if (strcmp((char*)rx_buffer, "ON G") == 0) {
+                transmit_string("Recibido G\r\n");
+            } else if (strcmp((char*)rx_buffer, "ON R") == 0) {
+                transmit_string("Recibido R\r\n");
+            }else if (strcmp((char*)rx_buffer, "ON B") == 0) {
+                transmit_string("Recibido B\r\n");
+            }
+            else {
+                transmit_string("Comando desconocido\r\n");
+                transmit_string((char*)rx_buffer);
 
-	}
+            }
 
+            rx_index = 0;
+        } else {
+            if (rx_index < sizeof(rx_buffer) - 1) {
+                rx_buffer[rx_index++] = dato;
+            } else {
+                rx_index = 0;
+            }
+        }
+    }
 }
+
 
 //Función para enviar un string a través de UART
 void transmit_string(const char* str) {
