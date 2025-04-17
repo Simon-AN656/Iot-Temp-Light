@@ -1,15 +1,14 @@
 #ifndef MACROS_H
 #define MACROS_H
 #include <stdint.h>
-/*
-
-0x4001 0800 - 0x4001 0BFF GPIO Port A Bus-- APB2
-0x4001 0C00 - 0x4001 0FFF GPIO Port B Bus-- APB2
-0x4001 1000 - 0x4001 13FF GPIO Port C Bus-- APB2
-0x4000 0000 - 0x4000 03FF TIM2 timer Bus-- APB1
-0x4002 1000 - 0x4002 13FF Reset and clock control RCC Bus-- AHB
-0x4000 4800 - 0x4000 4BFF USART3
- */
+/*********************************************************************
+ * 0x4001 0800 - 0x4001 0BFF GPIO Port A Bus-- APB2
+ * 0x4001 0C00 - 0x4001 0FFF GPIO Port B Bus-- APB2
+ * 0x4001 1000 - 0x4001 13FF GPIO Port C Bus-- APB2
+ * 0x4000 0000 - 0x4000 03FF TIM2 timer Bus-- APB1
+ * 0x4002 1000 - 0x4002 13FF Reset and clock control RCC Bus-- AHB
+ * 0x4000 4800 - 0x4000 4BFF USART3
+ *********************************************************************/
 
 
 //Definicion de mascros de las bases de los  registros
@@ -41,10 +40,12 @@
 #define NVIC_ISER1 (*(volatile uint32_t*)(NVIC_BASE + NVIC_ISER1_OFFSET))
 #define NVIC_IPR_BASE  0xE000E400
 
-// Macro para establecer la prioridad de una interrupción (IRQ)
-// IRQn: número de la interrupción (p.ej. 39)
-// PRIORITY: valor de prioridad (0 a 15, donde menor valor es mayor prioridad)
-// Los 4 bits más altos de cada byte son efectivos, entonces se hace: PRIORITY << 4
+/************************************************************************************
+ * Macro para establecer la prioridad de una interrupción (IRQ)
+ * IRQn: número de la interrupción (p.ej. 39)
+ * PRIORITY: valor de prioridad (0 a 15, donde menor valor es mayor prioridad)
+ * Los 4 bits más altos de cada byte son efectivos, entonces se hace: PRIORITY << 4
+ * **********************************************************************************/
 #define NVIC_SET_PRIORITY(IRQn, PRIORITY)  \
     (*(volatile uint8_t*)(NVIC_IPR_BASE + ((IRQn) & 0xFF)) = ((PRIORITY & 0x0F) << 4))
 
