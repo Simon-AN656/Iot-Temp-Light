@@ -24,7 +24,7 @@ void uart_init (void){
 * DIV_Fraction = .34 * 16 = 5.44 = 6
 * USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6
 * NOTE: Default HSI 8MHz
-* **********************************************************/
+* ***********************************************************/
 
 	USARTx_BRR(USART3_BASE) = (4 << 4) | 6;
 
@@ -116,33 +116,6 @@ void transmit_string(const char* str) {
         USARTx_DR(USART3_BASE) = *str++;  // Enviar el carácter
     }
 }
-
-// Función para recibir un string a través de UART con timeout
-/*void receive_string(char* buffer, int length) {
-    int i = 0;
-    int timeout = 10000;  // Tiempo de espera máximo para recibir datos (puedes ajustar este valor)
-
-    while (i < length - 1) {
-        // Esperar hasta que haya datos en RX o se alcance el tiempo de espera
-        if (timeout-- == 0) {
-            // Si se alcanzó el timeout, salimos
-            buffer[i] = '\0';  // Aseguramos que el string termine correctamente
-            return;
-        }
-
-        if (USARTx_SR(USART3_BASE) & (1U << 5)) {  // Verifica si hay datos en el buffer de recepción
-            char received_char = USARTx_DR(USART3_BASE);  // Leer el dato recibido
-            buffer[i++] = received_char;
-
-            if (received_char == '\n') {
-                break;  // Romper si hemos recibido el final de línea
-            }
-        }
-    }
-    buffer[i] = '\0';  // Asegurarse de que el string esté terminado en '\0'
-}*/
-
-
 
 void comunicate_process (void){
 
