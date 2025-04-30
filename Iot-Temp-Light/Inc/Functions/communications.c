@@ -20,13 +20,13 @@ void uart_init (void){
 * BaudRate setup USARTDIV = PCLK/(16 * BaudRate)
 * BaudRate= 115200	PCLK= 8MHz
 * USARTDIV =  8MHz/(16 * 115200) = 8MHz/1843200 = 4.34
-* DIV_Mantissa =  4
-* DIV_Fraction = .34 * 16 = 5.44 = 6
+* DIV_Mantissa =  4/19
+* DIV_Fraction = .34 * 16 = 5.44 = 6/ .53 * 16 = 8.48 = 9
 * USART_BRR = (Mantisa << 4)∣Fraccion = (4 << 4)∣6
 * NOTE: Default HSI 8MHz
 * ***********************************************************/
 
-	USARTx_BRR(USART3_BASE) = (4 << 4) | 6;
+	USARTx_BRR(USART3_BASE) = (0x13 << 4) | 9;
 
 	//Control register 1 configuration
 	USARTx_CR1(USART3_BASE) = 0x0000;
