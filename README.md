@@ -15,6 +15,7 @@ precisa del sensor **DS18B20** (temperatura digital 1-Wire) y sensores de luz an
 ## Hardware Utilizado
 
 - STM32F103C8T6 ("Blue Pill")
+- ESP8266 (Con firmware para manejar conexiones MQTT)
 - Sensor de temperatura **DS18B20**
 - LDR con divisor resistivo
 - Pull-up de 4.7kΩ para línea 1-Wire
