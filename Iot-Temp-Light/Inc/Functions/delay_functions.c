@@ -23,26 +23,32 @@
  * ****************************************************************************/
 void system_init_72MHz(){
 
+	//Configuracion de memoria flash:
 	FLASH_ACR |= (1U << 4);
 	FLASH_ACR &= ~(0x7 << 0);
 	FLASH_ACR |= (0x2 << 0);
 
+	//Se habilita el oscilador externo(HSE)
 	RCC_CR |= (1U << 16);
 	while ((RCC_CR & (1 << 17)) == 0)
 
+	//Configuracion de PLL
 	RCC_CFGR &= ~(0xFU << 18);
 	RCC_CFGR |= (1U << 16);
 	RCC_CFGR |= (0x7U << 18);
 
+	//Habilitacion de PLL
 	RCC_CR |= (1U << 24);
 	while ((RCC_CR & (1 << 25)) == 0);
 
+	// Configuración de los buses: AHB (72 MHz), APB1 (36 MHz), APB2 (72 MHz)
 	RCC_CFGR &= ~(0x3U << 0);
 	RCC_CFGR |= (0x2U << 0);
 
 	RCC_CFGR &= ~(0x3FFU << 4);
 	RCC_CFGR |= (1U << 10);
 
+	// Espera hasta que el PLL esté configurado correctamente como SYSCLK
 	while ((RCC_CFGR & (0x3U << 2)) != (0x2U << 2));
 
 }
