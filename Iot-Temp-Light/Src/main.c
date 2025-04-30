@@ -19,10 +19,15 @@ int main(void)
 {
 	//Clock enable bus RCC USART and GPIO
 	RCC_APB1ENR |= (1U << 18);
+	RCC_APB1ENR |= (1U << 0);
 	RCC_APB2ENR |= (0x3U << 3);
 
-    // Inicializar la UART
+	system_init_72MHz();
 	init_system();
+	comunicate_process();
+
+    // Inicializar la UART
+
 	comunicate_process();
     uart_init();
     button_enable();
