@@ -120,7 +120,7 @@ void transmit_string(const char* str) {
 void comunicate_process (void){
 
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 15);
-	delay_ms(100);
+	delay_us(480);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 15);
 
 }
@@ -128,7 +128,7 @@ void comunicate_process (void){
 void recive_data_ok (void){
 
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 14);
-	delay_ms(100);
+	delay_us(480);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 14);
 
 }
@@ -136,7 +136,7 @@ void recive_data_ok (void){
 void recive_data_error (void){
 
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 13);
-	delay_ms(100);
+	delay_us(480);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 13);
 
 }
