@@ -53,13 +53,42 @@ void system_init_72MHz(){
 
 }
 
+void delay_init(){
+
+	RCC_APB1ENR |= (1U << 0);
+
+	TIMx_PSC(TIM2_BASE) = 72 - 1;
+	TIMx_ARR(TIM2_BASE) = 0xFFFF;
+	TIMx_EGR(TIM2_BASE) = (1U << 0);
+	TIMx_CR1(TIM2_BASE) = 0;
+
+}
+
+void delay_us(uint16_t us){
+
+	TIMx_CR1(TIM2_BASE) &= ~(1U << 0);      // CEN = 0
+
+	    // 2) Fuerza el update para cargar PSC si hiciera falta
+	TIMx_EGR(TIM2_BASE) = (1U << 0);
+
+	TIMx_CNT(TIM2_BASE) = 0;
+	TIMx_SR(TIM2_BASE) &= ~(1U << 0);
+	TIMx_CR1(TIM2_BASE) |= (1U << 0);
+
+	while (TIMx_CNT(TIM2_BASE) < us){
+
+	}
+
+	TIMx_CR1(TIM2_BASE) &= ~(1U << 0);
+}
+
 // Función de retardo aproximado en milisegundos
-void delay_ms(uint32_t ms)
+void delay_ms(uint16_t ms)
 {
-    volatile uint32_t count;
     while(ms--)
     {
-        // Este bucle interno es aproximado; puedes ajustarlo para lograr 1 ms
-        for(count = 0; count < 8000; count++) { }
+
+    	delay_us(1000);
+
     }
 }
