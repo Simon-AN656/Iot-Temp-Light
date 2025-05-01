@@ -19,6 +19,7 @@
 #define AFIO_BASE		0x40010000U
 #define NVIC_BASE		0xE000E100U
 #define FLASH_BASE 		0x40022000U
+#define TIM2_BASE 		0x40000000U
 
 //Flash access control memory
 #define FLASH_ACR_OFFSET 	0x00U
@@ -32,6 +33,12 @@
 #define CRL_OFFSET			0x00U
 #define ODR_OFFSET			0x0CU
 #define IDR_OFFSET			0x08U
+#define TIMx_CR1_OFFSET 	0x00U
+#define TIMx_SR_OFFSET 		0x10U
+#define TIMx_CNT_OFFSET 	0x24U
+#define TIMx_PSC_OFFSET 	0x28U
+#define TIMx_ARR_OFFSET 	0x2CU
+#define TIMx_EGR_OFFSET 	0x14U
 #define USART_SR_OFFSET 	0x00U
 #define USART_DR_OFFSET		0x04U
 #define USART_BRR_OFFSET	0x08U
@@ -64,6 +71,12 @@
 #define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
 #define GPIOx_ODR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + ODR_OFFSET))
 #define GPIOx_IDR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + IDR_OFFSET))
+#define TIMx_CR1(TIMx) 		(*(volatile uint32_t*)(TIMx + TIMx_CR1_OFFSET))
+#define TIMx_SR(TIMx)  		(*(volatile uint32_t*)(TIMx + TIMx_SR_OFFSET))
+#define TIMx_CNT(TIMx)  	(*(volatile uint32_t*)(TIMx + TIMx_CNT_OFFSET))
+#define TIMx_PSC(TIMx)  	(*(volatile uint32_t*)(TIMx + TIMx_PSC_OFFSET))
+#define TIMx_ARR(TIMx)  	(*(volatile uint32_t*)(TIMx + TIMx_ARR_OFFSET))
+#define TIMx_EGR(TIMx)  	(*(volatile uint32_t*)(TIMx + TIMx_EGR_OFFSET))
 #define USARTx_SR(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_SR_OFFSET))
 #define USARTx_DR(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_DR_OFFSET))
 #define USARTx_BRR(USARTx) 	(*(volatile uint32_t*)(USARTx + USART_BRR_OFFSET))
