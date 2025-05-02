@@ -23,7 +23,7 @@
  * ****************************************************************************/
 void system_init_72MHz(){
 
-	//Configuracion de memoria flash:
+	//Configuracion de memoria flash
 	FLASH_ACR |= (1U << 4);
 	FLASH_ACR &= ~(0x7 << 0);
 	FLASH_ACR |= (0x2 << 0);
@@ -50,6 +50,32 @@ void system_init_72MHz(){
 
 	// Espera hasta que el PLL esté configurado correctamente como SYSCLK
 	while ((RCC_CFGR & (0x3U << 2)) != (0x2U << 2));
+
+
+/********************************************************************************************************
+ * Inicialización de los LEDs para indicar el estado del sistema:
+ * - El LED en PC13 se enciende para indicar que el microcontrolador está encendido y el sistema
+ *   ha sido inicializado correctamente.
+ * - Se configuran los pines PB13, PB14 y PB15 para LEDs RGB que servirán como indicadores de estado
+ *   en las funciones `receive_data_ok`, `receive_data_error` y `communicate_process`.
+ *
+ * Descripción de la configuración:
+ * - Configuración de pines PB13, PB14 y PB15 como salidas (para LEDs RGB).
+ * - Configuración de pin PC13 como salida para el indicador de encendido.
+ * - Se enciende el LED de encendido en PC13 (se pone en '1').
+ * - Se apaga el LED de encendido en PC13 (se pone en '0') al finalizar la configuración.
+ ********************************************************************************************************/
+
+	//Se limpian y configuran bits 20:31 para pines PB13, PB14 y PB15
+	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
+	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
+	//Se limpian y configuran bits 20:23 para pin PC13
+	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
+	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
+	//Se ponen en 1 pin PC13
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
+	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
+	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
 
 }
 
