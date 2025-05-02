@@ -41,20 +41,6 @@ void uart_init (void){
 
 }
 
-void init_system (void){
-
-	//Se limpian y configuran bits 20:31 para pines PB13, PB14 y PB15
-	GPIOx_CRH(GPIOB_BASE) &= ~(0xFFFU << 20);
-	GPIOx_CRH(GPIOB_BASE) |= (0x333U << 20);
-	//Se limpian y configuran bits 20:23 para pin PC13
-	GPIOx_CRH(GPIOC_BASE) &= ~(0xFU << 20);
-	GPIOx_CRH(GPIOC_BASE) |= (0x3U << 20);
-	//Se ponen en 1 pin PC13
-	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
-	GPIOx_ODR(GPIOC_BASE) |= (1U << 13);
-	GPIOx_ODR(GPIOC_BASE) &= ~(1U << 13);
-}
-
 void button_enable (void){
 
 	//Limpieza y configuarcin de bits 4:7 para PB1
@@ -120,7 +106,7 @@ void transmit_string(const char* str) {
 void comunicate_process (void){
 
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 15);
-	delay_us(480);
+	delay_ms(100);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 15);
 
 }
@@ -128,7 +114,7 @@ void comunicate_process (void){
 void recive_data_ok (void){
 
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 14);
-	delay_us(480);
+	delay_ms(100);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 14);
 
 }
@@ -136,7 +122,7 @@ void recive_data_ok (void){
 void recive_data_error (void){
 
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 13);
-	delay_us(480);
+	delay_ms(100);
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 13);
 
 }

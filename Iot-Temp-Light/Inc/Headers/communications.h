@@ -3,7 +3,6 @@
 
 void uart_init (void);
 void button_enable (void);
-void init_system (void);
 void USART3_IRQHandler(void);
 void transmit_string(const char* str);
 void comunicate_process (void);
