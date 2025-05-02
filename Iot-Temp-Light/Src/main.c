@@ -18,9 +18,6 @@ uint8_t button_pressed = 0;
 
 int main(void)
 {
-	//Clock enable bus RCC USART and GPIO
-	RCC_APB1ENR |= (1U << 18);
-	RCC_APB2ENR |= (0x3U << 3);
 
 	init_hardware();
 	comunicate_process();
