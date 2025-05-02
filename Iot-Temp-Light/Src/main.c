@@ -8,6 +8,7 @@
 
 #include <stdint.h>
 #include "Headers/Macros.h"
+#include "Headers/hardware_setup.h"
 #include "Headers/communications.h"
 #include "Headers/delay_functions.h"
 #include <stddef.h>
@@ -21,11 +22,10 @@ int main(void)
 	RCC_APB1ENR |= (1U << 18);
 	RCC_APB2ENR |= (0x3U << 3);
 
-	system_init_72MHz();
-	delay_init();
+	init_hardware();
 	comunicate_process();
     uart_init();
-    button_enable();
+
 
     while(1) {
 
