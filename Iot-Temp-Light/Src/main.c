@@ -22,33 +22,23 @@ int main(void)
 	RCC_APB2ENR |= (0x3U << 3);
 
 	system_init_72MHz();
-	init_system();
 	delay_init();
-	comunicate_process();
-
-    // Inicializar la UART
-
 	comunicate_process();
     uart_init();
     button_enable();
 
     while(1) {
 
-    	delay_us(480);
-    	recive_data_ok();
-    	delay_us(480);
-        recive_data_ok();
-
-            /* Detectar flanco de subida (botón presionado)
+            // Detectar flanco de subida (botón presionado)
             if((GPIOx_IDR(GPIOB_BASE) & (1U << 1)) && !button_pressed) {
                 //Marca del boton presionado
             	button_pressed = 1;
 
-                delay_us(480);
+                delay_ms(100);
                 recive_data_ok();
-                delay_us(480);
+                delay_ms(100);
                 recive_data_ok();
-                delay_us(480);
+                delay_ms(100);
 
 
             }
@@ -57,7 +47,7 @@ int main(void)
             if(!(GPIOx_IDR(GPIOB_BASE) & (1U << 1))) {
             	//Reinicio de variable para marcar el boton como no presionado
                 button_pressed = 0;
-        }*/
+        }
 
     }
 }
