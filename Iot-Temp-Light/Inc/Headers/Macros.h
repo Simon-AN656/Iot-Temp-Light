@@ -18,6 +18,7 @@
 #define RCC_BASE 		0x40021000U
 #define EXTI_BASE 		0x40010400U
 #define AFIO_BASE		0x40010000U
+#define ADC1_BASE		0x40012400U
 #define NVIC_BASE		0xE000E100U
 #define FLASH_BASE 		0x40022000U
 #define TIM2_BASE 		0x40000000U
@@ -36,6 +37,11 @@
 #define EXTI_FTSR_OFFSET	0x0CU
 #define EXTI_PR_OFFSET		0x14U
 #define AFIO_EXTICR1_OFFSET	0x08U
+#define ADC1_CR2_OFFSET		0x08U
+#define ADC1_SQR1_OFFSET	0x2CU
+#define ADC1_SQR3_OFFSET	0x34U
+#define ADC1_SR_OFFSET		0x00U
+#define ADC1_DR_OFFSET		0x4CU
 #define CRH_OFFSET 			0x04U
 #define CRL_OFFSET			0x00U
 #define ODR_OFFSET			0x0CU
@@ -81,6 +87,11 @@
 #define EXTI_FTSR			(*(volatile uint32_t*)(EXTI_BASE + EXTI_FTSR_OFFSET))
 #define EXTI_PR				(*(volatile uint32_t*)(EXTI_BASE + EXTI_PR_OFFSET))
 #define AFIO_EXTICR1		(*(volatile uint32_t*)(AFIO_BASE + AFIO_EXTICR1_OFFSET))
+#define ADC1_CR2			(*(volatile uint32_t*)(ADC1_BASE + ADC1_CR2_OFFSET))
+#define ADC1_SQR1			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SQR1_OFFSET))
+#define ADC1_SQR3			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SQR3_OFFSET))
+#define ADC1_SR				(*(volatile uint32_t*)(ADC1_BASE + ADC1_SR_OFFSET))
+#define ADC1_DR				(*(volatile uint32_t*)(ADC1_BASE + ADC1_DR_OFFSET))
 #define GPIOx_CRH(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRH_OFFSET))
 #define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
 #define GPIOx_ODR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + ODR_OFFSET))
