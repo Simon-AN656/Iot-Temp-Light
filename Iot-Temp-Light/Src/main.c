@@ -26,7 +26,7 @@ int main(void)
 
     while(1) {
 
-    	__asm volatile ("wfi");
+    	//__asm volatile ("wfi");
 
             /*/ Detectar flanco de subida (botón presionado)
             if((GPIOx_IDR(GPIOB_BASE) & (1U << 1)) && !button_pressed) {
