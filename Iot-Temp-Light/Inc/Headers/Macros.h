@@ -33,6 +33,7 @@
 #define RCC_CFGR_OFFSET		0x04U
 #define EXTI_IMR_OFFSET		0x00U
 #define EXTI_RTSR_OFFSET	0x08U
+#define EXTI_FTSR_OFFSET	0x0CU
 #define EXTI_PR_OFFSET		0x14U
 #define AFIO_EXTICR1_OFFSET	0x08U
 #define CRH_OFFSET 			0x04U
@@ -76,8 +77,9 @@
 #define RCC_CR		 		(*(volatile uint32_t*)(RCC_BASE + RCC_CR_OFFSET))
 #define RCC_CFGR		 	(*(volatile uint32_t*)(RCC_BASE + RCC_CFGR_OFFSET))
 #define EXTI_IMR			(*(volatile uint32_t*)(EXTI_BASE + EXTI_IMR_OFFSET))
-#define EXTI_RTSR			(*(volatile uint32_t*)(AFIO_BASE + EXTI_RTSR_OFFSET))
-#define EXTI_PR				(*(volatile uint32_t*)(AFIO_BASE + EXTI_PR_OFFSET))
+#define EXTI_RTSR			(*(volatile uint32_t*)(EXTI_BASE + EXTI_RTSR_OFFSET))
+#define EXTI_FTSR			(*(volatile uint32_t*)(EXTI_BASE + EXTI_FTSR_OFFSET))
+#define EXTI_PR				(*(volatile uint32_t*)(EXTI_BASE + EXTI_PR_OFFSET))
 #define AFIO_EXTICR1		(*(volatile uint32_t*)(AFIO_BASE + AFIO_EXTICR1_OFFSET))
 #define GPIOx_CRH(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRH_OFFSET))
 #define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
