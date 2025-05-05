@@ -7,6 +7,7 @@ void rcc_init(void){
 	//Clock enable bus RCC USART and GPIO
 	RCC_APB1ENR |= (1U << 18);
 	RCC_APB2ENR |= (0x3U << 3);
+	RCC_APB2ENR |= (1U << 0);
 
 }
 
@@ -26,6 +27,7 @@ void button_enable (void){
 	//Configuracion EXTI
 	EXTI_IMR |= (1U << 1);
 	EXTI_RTSR |= (1U << 1);
+	//EXTI_FTSR |= (1U << 1);
 	EXTI_PR |= (1U << 1);
 
 	//Habilitacion de NVIC EXTI1
