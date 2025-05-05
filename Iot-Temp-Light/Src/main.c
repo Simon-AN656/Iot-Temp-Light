@@ -14,7 +14,7 @@
 #include <stddef.h>
 #include <string.h>
 
-uint8_t button_pressed = 0;
+
 
 int main(void)
 {
@@ -26,7 +26,9 @@ int main(void)
 
     while(1) {
 
-            // Detectar flanco de subida (botón presionado)
+    	__asm volatile ("wfi");
+
+            /*/ Detectar flanco de subida (botón presionado)
             if((GPIOx_IDR(GPIOB_BASE) & (1U << 1)) && !button_pressed) {
                 //Marca del boton presionado
             	button_pressed = 1;
@@ -44,7 +46,7 @@ int main(void)
             if(!(GPIOx_IDR(GPIOB_BASE) & (1U << 1))) {
             	//Reinicio de variable para marcar el boton como no presionado
                 button_pressed = 0;
-        }
+        }*/
 
     }
 }
