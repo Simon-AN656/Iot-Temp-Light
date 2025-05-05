@@ -42,6 +42,7 @@
 #define ADC1_SQR3_OFFSET	0x34U
 #define ADC1_SR_OFFSET		0x00U
 #define ADC1_DR_OFFSET		0x4CU
+#define ADC_SMPR1_OFFSET	0x0CU
 #define CRH_OFFSET 			0x04U
 #define CRL_OFFSET			0x00U
 #define ODR_OFFSET			0x0CU
@@ -92,6 +93,7 @@
 #define ADC1_SQR3			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SQR3_OFFSET))
 #define ADC1_SR				(*(volatile uint32_t*)(ADC1_BASE + ADC1_SR_OFFSET))
 #define ADC1_DR				(*(volatile uint32_t*)(ADC1_BASE + ADC1_DR_OFFSET))
+#define ADC_SMPR1			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SMPR1_OFFSET))
 #define GPIOx_CRH(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRH_OFFSET))
 #define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
 #define GPIOx_ODR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + ODR_OFFSET))
