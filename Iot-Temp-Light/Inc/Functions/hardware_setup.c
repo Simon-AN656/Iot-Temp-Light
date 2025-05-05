@@ -1,13 +1,15 @@
 #include "Headers/Macros.h"
 #include "Headers/delay_functions.h"
 #include "Headers/communications.h"
+#include "Headers/delay_functions.h"
 
 void rcc_init(void){
 
-	//Clock enable bus RCC USART and GPIO
+	//Clock enable bus RCC USART, GPIO and AFIO
 	RCC_APB1ENR |= (1U << 18);
 	RCC_APB2ENR |= (0x3U << 3);
 	RCC_APB2ENR |= (1U << 0);
+	RCC_APB2ENR |= (1U << 9);
 
 }
 
@@ -32,6 +34,29 @@ void button_enable (void){
 
 	//Habilitacion de NVIC EXTI1
 	NVIC_ISER0 |= (1U << 7);
+
+}
+
+void init_adc(void){
+
+	ADC1_CR2 |= (1U << 0);
+	delay_us(10);
+
+	ADC1_CR2 |= (1U << 2);
+	while (ADC1_CR2 & (1U << 2));
+
+	ADC1_CR2 |= (1U << 23);
+	delay_us(20);
+	ADC1_CR2 |= (1U << 20);
+
+	//Configura sample time largo para canales 16 y 17 —
+	ADC1_SMPR1 |= (0x7U << 18);  // channel 16
+    ADC1_SMPR1 |= (0x7U << 21);  // channel 17
+
+	ADC1_SQR1 &= ~(0xFU << 20);
+	ADC1_SQR1 |= (0x1U << 20);
+	// Configura SQ1 = canal 16, SQ2 = canal 17
+	ADC1_SQR3 = (16U << 0) | (17U << 5);
 
 }
 
