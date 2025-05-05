@@ -16,10 +16,12 @@
 #define GPIOC_BASE 		0x40011000U
 #define USART3_BASE 	0x40004800U
 #define RCC_BASE 		0x40021000U
+#define EXTI_BASE 		0x40010400U
 #define AFIO_BASE		0x40010000U
 #define NVIC_BASE		0xE000E100U
 #define FLASH_BASE 		0x40022000U
 #define TIM2_BASE 		0x40000000U
+
 
 //Flash access control memory
 #define FLASH_ACR_OFFSET 	0x00U
@@ -29,6 +31,10 @@
 #define RCC_APB2ENR_OFFSET 	0x18U
 #define RCC_CR_OFFSET		0x00U
 #define RCC_CFGR_OFFSET		0x04U
+#define EXTI_IMR_OFFSET		0x00U
+#define EXTI_RTSR_OFFSET	0x08U
+#define EXTI_PR_OFFSET		0x14U
+#define AFIO_EXTICR1_OFFSET	0x08U
 #define CRH_OFFSET 			0x04U
 #define CRL_OFFSET			0x00U
 #define ODR_OFFSET			0x0CU
@@ -45,11 +51,13 @@
 #define USART_CR1_OFFSET	0x0CU
 #define USART_CR2_OFFSET	0x10U
 #define AFIO_MAPR_OFFSET  	0x04U
+#define NVIC_ISER0_OFFSET	0x00U
 #define NVIC_ISER1_OFFSET	0x04U
 
 //Macros para NVIC
 #define NVIC_ISER1 (*(volatile uint32_t*)(NVIC_BASE + NVIC_ISER1_OFFSET))
 #define NVIC_IPR_BASE  0xE000E400
+#define NVIC_ISER0 (*(volatile uint32_t*)(NVIC_BASE + NVIC_ISER0_OFFSET))
 
 /************************************************************************************
  * Macro para establecer la prioridad de una interrupción (IRQ)
@@ -67,6 +75,10 @@
 #define RCC_APB2ENR 		(*(volatile uint32_t*)(RCC_BASE + RCC_APB2ENR_OFFSET))
 #define RCC_CR		 		(*(volatile uint32_t*)(RCC_BASE + RCC_CR_OFFSET))
 #define RCC_CFGR		 	(*(volatile uint32_t*)(RCC_BASE + RCC_CFGR_OFFSET))
+#define EXTI_IMR			(*(volatile uint32_t*)(EXTI_BASE + EXTI_IMR_OFFSET))
+#define EXTI_RTSR			(*(volatile uint32_t*)(AFIO_BASE + EXTI_RTSR_OFFSET))
+#define EXTI_PR				(*(volatile uint32_t*)(AFIO_BASE + EXTI_PR_OFFSET))
+#define AFIO_EXTICR1		(*(volatile uint32_t*)(AFIO_BASE + AFIO_EXTICR1_OFFSET))
 #define GPIOx_CRH(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRH_OFFSET))
 #define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
 #define GPIOx_ODR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + ODR_OFFSET))

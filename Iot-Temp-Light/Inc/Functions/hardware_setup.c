@@ -19,6 +19,18 @@ void button_enable (void){
 	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
 	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
 
+	//Configuracion para interrupcion
+	AFIO_EXTICR1 &= ~(0xFU << 4);
+	AFIO_EXTICR1 |= (1U << 4);
+
+	//Configuracion EXTI
+	EXTI_IMR |= (1U << 1);
+	EXTI_RTSR |= (1U << 1);
+	EXTI_PR |= (1U << 1);
+
+	//Habilitacion de NVIC EXTI1
+	NVIC_ISER0 |= (1U << 7);
+
 }
 
 void init_hardware(void){
