@@ -10,6 +10,17 @@ void rcc_init(void){
 
 }
 
+void button_enable (void){
+
+	//Limpieza y configuarcin de bits 4:7 para PB1
+	GPIOx_CRL(GPIOB_BASE) &= ~(0xFU << 4);
+	GPIOx_CRL(GPIOB_BASE) |= (1U << 7);
+	//Configuracion de ODR en estado alto
+	GPIOx_ODR(GPIOB_BASE) &= ~(1U << 1);
+	GPIOx_ODR(GPIOB_BASE) |= (1U << 1);
+
+}
+
 void init_hardware(void){
 
 	rcc_init();

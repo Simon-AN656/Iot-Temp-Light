@@ -2,6 +2,7 @@
 #define HARDWARE_SETUP_H
 
 void rcc_init(void);
+void button_enable (void);
 void init_hardware(void);
 
 #endif
