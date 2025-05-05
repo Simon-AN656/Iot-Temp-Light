@@ -46,6 +46,7 @@ void USART3_IRQHandler(void)
             else {
                 transmit_string("Comando desconocido\r\n");
                 transmit_string((char*)rx_buffer);
+                transmit_string("\r\n");
 
             }
 
