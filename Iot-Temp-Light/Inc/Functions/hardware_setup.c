@@ -67,10 +67,10 @@ void init_adc(void){
 	ADC1_SMPR1 &= ~(0x7U << 21); // Limpia bits
 	ADC1_SMPR1 |= (0x7U << 21);  // Tiempo de muestreo máximo
 
-	ADC1_CR1 |= (1U << 8); // Habilita el modo de escaneo
-
 	// Configura SQ1 = canal 16, SQ2 = canal 17
 	ADC1_SQR3 = (16U << 0) | (17U << 5);
+
+	ADC1_CR1 |= (1U << 8); // Habilita el modo de escaneo
 
 	ADC1_CR2 |= (1U << 1);
 
