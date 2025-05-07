@@ -48,6 +48,10 @@ void system_init_72MHz(){
 	RCC_CFGR &= ~(0x3FFU << 4);
 	RCC_CFGR |= (1U << 10);
 
+	//Divisior de PLL de ADC dividido a 6 = 12MHz
+	RCC_CFGR &= ~(0x3U << 14);
+	RCC_CFGR |= (0x2U << 14);
+
 	// Espera hasta que el PLL esté configurado correctamente como SYSCLK
 	while ((RCC_CFGR & (0x3U << 2)) != (0x2U << 2));
 
