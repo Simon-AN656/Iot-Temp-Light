@@ -59,11 +59,11 @@ float get_celsius(void){
 	float Vdda = (1.2 * 4096) / (float)direct_vref;
 
 	    // 2) Obtener voltaje del sensor
-	float V_sense = (direct_temp * Vdda_local) / 4096.0f;
+	float V_sense = ((float)direct_temp * Vdda) / 4096.0f;
 
 	    // 3) Aplicar fórmula del datasheet
 	    //    V_25 = 1.43 V, Avg_Slope = 4.3 mV/°C
-    float temperatura = ((1.43f - v_sense) / 0.0043f) + 25.0f;
+    float temperatura = ((1.43f - V_sense) / 0.0043f) + 25.0f;
     return temperatura;
 
 
