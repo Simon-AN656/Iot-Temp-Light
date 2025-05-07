@@ -33,17 +33,17 @@ void send_temp(void){
 void get_temp_vref(uint16_t* direct_temp, uint16_t* direct_vref){
 
 	//Inicia conversion SWSTART
-	ADC1_CR2 |= (1U << 22);
-	delay_us(100);
+	//ADC1_CR2 |= (1U << 22);
+
 	//Se escribe la lectura del canal 16 en la variable direct_temp
 	while(!(ADC1_SR & (1 << 1)));
-	*direct_temp = (uint16_t)ADC1_DR;
+	*direct_vref = (uint16_t)ADC1_DR;
 
-	delay_us(100);
+	while(!(ADC1_SR & (1 << 1)));
 
 	// Lee el valor del canal 17 (VREFINT)
 	while (!(ADC1_SR & (1U << 1))); // Espera a que EOC esté activo
-	*direct_vref = (uint16_t)ADC1_DR; // Lee el valor convertido (canal 17)
+	*direct_temp = (uint16_t)ADC1_DR; // Lee el valor convertido (canal 17)
 
 
 }
