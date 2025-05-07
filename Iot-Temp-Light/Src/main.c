@@ -11,6 +11,7 @@
 #include "Headers/hardware_setup.h"
 #include "Headers/communications.h"
 #include "Headers/delay_functions.h"
+#include "Headers/adc_functions.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -21,7 +22,10 @@ int main(void)
 
 	init_hardware();
 	comunicate_process();
+	delay_ms(500);
     uart_init();
+    comunicate_process();
+    delay_ms(500);
 
 
     while(1) {
