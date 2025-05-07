@@ -37,12 +37,13 @@
 #define EXTI_FTSR_OFFSET	0x0CU
 #define EXTI_PR_OFFSET		0x14U
 #define AFIO_EXTICR1_OFFSET	0x08U
+#define ADC1_CR1_OFFSET		0x04U
 #define ADC1_CR2_OFFSET		0x08U
 #define ADC1_SQR1_OFFSET	0x2CU
 #define ADC1_SQR3_OFFSET	0x34U
 #define ADC1_SR_OFFSET		0x00U
 #define ADC1_DR_OFFSET		0x4CU
-#define ADC_SMPR1_OFFSET	0x0CU
+#define ADC1_SMPR1_OFFSET	0x0CU
 #define CRH_OFFSET 			0x04U
 #define CRL_OFFSET			0x00U
 #define ODR_OFFSET			0x0CU
@@ -76,6 +77,9 @@
 #define NVIC_SET_PRIORITY(IRQn, PRIORITY)  \
     (*(volatile uint8_t*)(NVIC_IPR_BASE + ((IRQn) & 0xFF)) = ((PRIORITY & 0x0F) << 4))
 
+#define VREFINT_CAL_ADDR 0x1FFFF7BAU   // dirección absoluta
+#define VREFINT_CAL      (*(uint16_t*)VREFINT_CAL_ADDR)
+
 
 //Definicion de las macros para la activacion de los registros base + offsets
 #define FLASH_ACR 			(*(volatile uint32_t*)(FLASH_BASE + FLASH_ACR_OFFSET))
@@ -88,12 +92,13 @@
 #define EXTI_FTSR			(*(volatile uint32_t*)(EXTI_BASE + EXTI_FTSR_OFFSET))
 #define EXTI_PR				(*(volatile uint32_t*)(EXTI_BASE + EXTI_PR_OFFSET))
 #define AFIO_EXTICR1		(*(volatile uint32_t*)(AFIO_BASE + AFIO_EXTICR1_OFFSET))
+#define ADC1_CR1			(*(volatile uint32_t*)(ADC1_BASE + ADC1_CR1_OFFSET))
 #define ADC1_CR2			(*(volatile uint32_t*)(ADC1_BASE + ADC1_CR2_OFFSET))
 #define ADC1_SQR1			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SQR1_OFFSET))
 #define ADC1_SQR3			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SQR3_OFFSET))
 #define ADC1_SR				(*(volatile uint32_t*)(ADC1_BASE + ADC1_SR_OFFSET))
 #define ADC1_DR				(*(volatile uint32_t*)(ADC1_BASE + ADC1_DR_OFFSET))
-#define ADC_SMPR1			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SMPR1_OFFSET))
+#define ADC1_SMPR1			(*(volatile uint32_t*)(ADC1_BASE + ADC1_SMPR1_OFFSET))
 #define GPIOx_CRH(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRH_OFFSET))
 #define GPIOx_CRL(GPIOx) 	(*(volatile uint32_t*)(GPIOx + CRL_OFFSET))
 #define GPIOx_ODR(GPIOx) 	(*(volatile uint32_t*)(GPIOx + ODR_OFFSET))
