@@ -4,6 +4,55 @@
 #include "Headers/delay_functions.h"
 #include <stdint.h>
 
+uint16_t direct_temp = 0, direct_vref = 0;
+
+void send_dtemp(void){
+
+
+	float temp =  direct_temp;
+	char temp_str[32], final_str[40];
+
+	float_to_str(temp, temp_str, 2);
+
+	int len = 0;
+
+	while (temp_str[len] != '\0') {
+
+		final_str[len] = temp_str[len];
+	    len++;
+	}
+
+	final_str[len++] = '\r';  // agrega \r
+	final_str[len++] = '\n';  // agrega \n
+	final_str[len] = '\0';    // fin de cadena
+
+	transmit_string(final_str);
+
+}
+
+void send_dvref(void){
+
+
+	float temp =  direct_vref;
+	char temp_str[32], final_str[40];
+
+	float_to_str(temp, temp_str, 2);
+
+	int len = 0;
+
+	while (temp_str[len] != '\0') {
+
+		final_str[len] = temp_str[len];
+	    len++;
+	}
+
+	final_str[len++] = '\r';  // agrega \r
+	final_str[len++] = '\n';  // agrega \n
+	final_str[len] = '\0';    // fin de cadena
+
+	transmit_string(final_str);
+
+}
 
 void send_temp(void){
 
@@ -29,34 +78,112 @@ void send_temp(void){
 
 }
 
-uint16_t get_temp_vref(void){
+void send_vdda(void){
+
+
+	float send_va =  get_celsius();
+	char va_str[32], final_str[40];
+
+	float_to_str(send_va, va_str, 2);
+
+	int len = 0;
+
+	while (va_str[len] != '\0') {
+
+		final_str[len] = va_str[len];
+	    len++;
+	}
+
+	final_str[len++] = '\r';  // agrega \r
+	final_str[len++] = '\n';  // agrega \n
+	final_str[len] = '\0';    // fin de cadena
+
+	transmit_string(final_str);
+
+}
+
+void send_vsense(void){
+
+
+	float send_ve =  get_celsius();
+	char ve_str[32], final_str[40];
+
+	float_to_str(send_ve, ve_str, 2);
+
+	int len = 0;
+
+	while (ve_str[len] != '\0') {
+
+		final_str[len] = ve_str[len];
+	    len++;
+	}
+
+	final_str[len++] = '\r';  // agrega \r
+	final_str[len++] = '\n';  // agrega \n
+	final_str[len] = '\0';    // fin de cadena
+
+	transmit_string(final_str);
+
+}
+
+void get_temp_vref(uint16_t* direct_temp, uint16_t* direct_vref){
 
 	//Inicia conversion SWSTART
 	ADC1_CR2 |= (1U << 22);
+	delay_us(100);
 	//Se escribe la lectura del canal 16 en la variable direct_temp
 	while(!(ADC1_SR & (1 << 1)));
+	*direct_temp = (uint16_t)ADC1_DR;
 
-	return (uint16_t)ADC1_DR;
+	delay_us(100);
+
+	// Lee el valor del canal 17 (VREFINT)
+	while (!(ADC1_SR & (1U << 1))); // Espera a que EOC esté activo
+	*direct_vref = (uint16_t)ADC1_DR; // Lee el valor convertido (canal 17)
+
 
 }
 
 float get_celsius(void){
 
 
-	uint16_t direct_temp = get_temp_vref();
+
+	get_temp_vref(&direct_temp, &direct_vref);
+
 
 	    // 1) Calcular Vdda real
-	//float Vdda = 3.3f * ((float)VREFINT_CAL / (float)direct_vref);
+	float v_sense = get_vsense();
 
 	    // 2) Obtener voltaje del sensor
-	float V_sense = (direct_temp * 3.3f) / 4096.0f;
+
 
 	    // 3) Aplicar fórmula del datasheet
 	    //    V_25 = 1.43 V, Avg_Slope = 4.3 mV/°C
-    float temperatura = ((V_sense - 1.43f) / 0.0043f) + 25.0f;
+    float temperatura = ((1.43f - v_sense) / 0.0043f) + 25.0f;
     return temperatura;
 
+
+
 }
+
+float get_vdda(void){
+
+
+	float Vdda = (1.2 * 4096) / (float)direct_vref;
+
+	return Vdda;
+}
+
+float get_vsense(void){
+
+	float Vdda_local = get_vdda();
+
+	float V_sense = (direct_temp * Vdda_local) / 4096.0f;
+
+	return V_sense;
+
+}
+
 
 
 void float_to_str(float val, char *buffer, int prec) {
