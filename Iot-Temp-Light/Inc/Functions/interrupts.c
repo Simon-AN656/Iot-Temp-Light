@@ -3,6 +3,7 @@
 #include "Headers/communications.h"
 #include "Headers/Macros.h"
 #include "Headers/delay_functions.h"
+#include "Headers/adc_functions.h"
 #include <string.h>
 
 volatile uint8_t button_pressed = 0;
@@ -13,7 +14,7 @@ void EXTI1_IRQHandler (void){
 
 	if (EXTI_PR & (1U << 1)) {
 		EXTI_PR |= (1U << 1);    // limpiar flag
-	    transmit_string("Boton presionado\r\n");
+	    send_temp();
 
 	}
 
