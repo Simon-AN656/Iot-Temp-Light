@@ -42,7 +42,6 @@ void init_adc(void){
 	ADC1_CR2 |= (1U << 0);
 	delay_us(10);
 
-	//ADC1_CR1 |= (1U << 8);
 
 	//Calibracion del sensor
 	ADC1_CR2 |= (1U << 2);
@@ -53,18 +52,28 @@ void init_adc(void){
 	delay_us(100);
 
 	ADC1_CR2 &= ~(1U << 20);
-	ADC1_CR1 &= ~(1U << 8);
-	//ADC1_CR2 |= (1U << 20);
+	//ADC1_CR1 &= ~(1U << 8);
+
+	//Habilita 2 converisones
+	ADC1_SQR1 &= ~(0xFU << 20);
+	ADC1_SQR1 |= (0x1U << 20);
+
 
 	//Configura sample time largo para canal 16
 	ADC1_SMPR1 &= ~(0x7U << 18);
 	ADC1_SMPR1 |= (0x7U << 18);  // channel 16
-    //ADC1_SMPR1 |= (0x7U << 21);  // channel 17
 
-	ADC1_SQR1 &= ~(0xFU << 20);
-	//ADC1_SQR1 |= (0x1U << 20);
+	// Canal 17 (VREFINT)
+	ADC1_SMPR1 &= ~(0x7U << 21); // Limpia bits
+	ADC1_SMPR1 |= (0x7U << 21);  // Tiempo de muestreo máximo
+
+	ADC1_CR1 |= (1U << 8); // Habilita el modo de escaneo
+
 	// Configura SQ1 = canal 16, SQ2 = canal 17
-	ADC1_SQR3 = (16U << 0);
+	ADC1_SQR3 = (16U << 0) | (17U << 5);
+
+	ADC1_CR2 |= (1U << 1);
+
 	ADC1_SR = 0;
 
 }
