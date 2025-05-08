@@ -40,23 +40,24 @@ void button_enable (void){
 void init_adc(void){
 
 	ADC1_CR2 |= (1U << 0);
-	delay_us(10);
-
-
-	//Calibracion del sensor
-	ADC1_CR2 |= (1U << 2);
-	while (ADC1_CR2 & (1U << 2)); //Bucle de espera a la terminacion de CAL
+	delay_us(100);
 
 	//Activacion de sensor de temperatura
 	ADC1_CR2 |= (1U << 23);
 	delay_us(100);
 
+	//Calibracion del sensor
+	ADC1_CR2 |= (1U << 2);
+	while (ADC1_CR2 & (1U << 2)); //Bucle de espera a la terminacion de CAL
+
 	ADC1_CR2 &= ~(1U << 20);
+	ADC1_CR2 |= (1U << 1);
+
 	//ADC1_CR1 &= ~(1U << 8);
 
 	//Habilita 2 converisones
 	ADC1_SQR1 &= ~(0xFU << 20);
-	ADC1_SQR1 |= (0x1U << 20);
+	//ADC1_SQR1 |= (0x1U << 20);
 
 
 	//Configura sample time largo para canal 16
@@ -64,15 +65,14 @@ void init_adc(void){
 	ADC1_SMPR1 |= (0x7U << 18);  // channel 16
 
 	// Canal 17 (VREFINT)
-	ADC1_SMPR1 &= ~(0x7U << 21); // Limpia bits
-	ADC1_SMPR1 |= (0x7U << 21);  // Tiempo de muestreo máximo
+	//ADC1_SMPR1 &= ~(0x7U << 21); // Limpia bits
+	//ADC1_SMPR1 |= (0x7U << 21);  // Tiempo de muestreo máximo
+
+	//Modo SCAN
+	//ADC1_CR1 |= (1U << 8); // Habilita el modo de escaneo
 
 	// Configura SQ1 = canal 16, SQ2 = canal 17
-	ADC1_SQR3 = (16U << 0) | (17U << 5);
-
-	ADC1_CR1 |= (1U << 8); // Habilita el modo de escaneo
-
-	ADC1_CR2 |= (1U << 1);
+	ADC1_SQR3 = (16U << 0);
 
 	ADC1_SR = 0;
 
