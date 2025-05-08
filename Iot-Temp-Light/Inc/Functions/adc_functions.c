@@ -4,7 +4,7 @@
 #include "Headers/delay_functions.h"
 #include <stdint.h>
 
-uint16_t direct_temp = 0, direct_vref = 0;
+uint16_t direct_temp = 0;
 
 void send_temp(void){
 
@@ -30,20 +30,20 @@ void send_temp(void){
 
 }
 
-void get_temp_vref(uint16_t* direct_temp, uint16_t* direct_vref){
+void get_temp_vref(uint16_t* direct_temp){
 
 	//Inicia conversion SWSTART
 	//ADC1_CR2 |= (1U << 22);
 
 	//Se escribe la lectura del canal 16 en la variable direct_temp
 	while(!(ADC1_SR & (1 << 1)));
-	*direct_vref = (uint16_t)ADC1_DR;
+	*direct_temp = (uint16_t)ADC1_DR;
 
-	while(!(ADC1_SR & (1 << 1)));
 
-	// Lee el valor del canal 17 (VREFINT)
+
+	/*/ Lee el valor del canal 17 (VREFINT)
 	while (!(ADC1_SR & (1U << 1))); // Espera a que EOC esté activo
-	*direct_temp = (uint16_t)ADC1_DR; // Lee el valor convertido (canal 17)
+	*direct_vref = (uint16_t)ADC1_DR; // Lee el valor convertido (canal 17)*/
 
 
 }
@@ -52,14 +52,16 @@ float get_celsius(void){
 
 
 
-	get_temp_vref(&direct_temp, &direct_vref);
+	get_temp_vref(&direct_temp);
 
+
+	float V_sense = get_vsense();
 
 	    // 1) Calcular Vdda real
-	float Vdda = (1.2 * 4096) / (float)direct_vref;
+	//float Vdda = (1.2 * 4096) / (float)direct_vref;
 
 	    // 2) Obtener voltaje del sensor
-	float V_sense = ((float)direct_temp * Vdda) / 4096.0f;
+	//float V_sense = ((float)direct_temp * Vdda) / 4096.0f;
 
 	    // 3) Aplicar fórmula del datasheet
 	    //    V_25 = 1.43 V, Avg_Slope = 4.3 mV/°C
@@ -117,13 +119,13 @@ void float_to_str(float val, char *buffer, int prec) {
 	float Vdda = (1.2 * 4096) / (float)direct_vref;
 
 	return Vdda;
-}
+}*/
 
 float get_vsense(void){
 
-	float Vdda_local = get_vdda();
+	//float Vdda_local = get_vdda();
 
-	float V_sense = (direct_temp * Vdda_local) / 4096.0f;
+	float V_sense = (direct_temp * 3.3) / 4096.0f;
 
 	return V_sense;
 
@@ -153,7 +155,7 @@ void send_dtemp(void){
 
 }
 
-void send_dvref(void){
+/*void send_dvref(void){
 
 
 	float temp =  direct_vref;
@@ -177,7 +179,7 @@ void send_dvref(void){
 
 }*/
 
-/*
+
 void send_vdda(void){
 
 
@@ -224,4 +226,4 @@ void send_vsense(void){
 
 	transmit_string(final_str);
 
-}*/
+}
