@@ -52,9 +52,6 @@ float get_celsius(void){
 
 	float V_sense = get_vsense();
 
-	    // 1) Calcular Vdda real
-	//float Vdda = (1.2 * 4096) / (float)direct_vref;
-
 	    // 2) Obtener voltaje del sensor
 	//float V_sense = ((float)direct_temp * Vdda) / 4096.0f;
 
@@ -108,17 +105,7 @@ void float_to_str(float val, char *buffer, int prec) {
 }
 
 
-/*float get_vdda(void){
-
-
-	float Vdda = (1.2 * 4096) / (float)direct_vref;
-
-	return Vdda;
-}*/
-
 float get_vsense(void){
-
-	//float Vdda_local = get_vdda();
 
 	float V_sense = (direct_temp * 3.3) / 4096.0f;
 
@@ -149,31 +136,6 @@ void send_dtemp(void){
 	transmit_string(final_str);
 
 }
-
-/*void send_dvref(void){
-
-
-	float temp =  direct_vref;
-	char temp_str[32], final_str[40];
-
-	float_to_str(temp, temp_str, 2);
-
-	int len = 0;
-
-	while (temp_str[len] != '\0') {
-
-		final_str[len] = temp_str[len];
-	    len++;
-	}
-
-	final_str[len++] = '\r';  // agrega \r
-	final_str[len++] = '\n';  // agrega \n
-	final_str[len] = '\0';    // fin de cadena
-
-	transmit_string(final_str);
-
-}*/
-
 
 void send_vdda(void){
 
