@@ -41,11 +41,6 @@ void get_temp_vref(uint16_t* direct_temp){
 
 
 
-	/*/ Lee el valor del canal 17 (VREFINT)
-	while (!(ADC1_SR & (1U << 1))); // Espera a que EOC esté activo
-	*direct_vref = (uint16_t)ADC1_DR; // Lee el valor convertido (canal 17)*/
-
-
 }
 
 float get_celsius(void){
