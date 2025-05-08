@@ -38,18 +38,31 @@ void get_temp_vref(uint16_t* direct_temp){
 
 }
 
+/**************************************************
+ * Esta función convierte el valor crudo leído del ADC
+ * (sensor interno de temperatura) a un voltaje, y luego
+ * calcula la temperatura en grados Celsius usando la fórmula:
+ *
+ * Temperature (°C) = ((V25 - VSENSE) / Avg_Slope) + 25
+ *
+ * - V25 = 1.43 V (voltaje a 25°C, típico para STM32)
+ * - Avg_Slope = 4.3 mV/°C (pendiente típica)
+ * - VSENSE: Voltaje leído del sensor
+ * - El ADC es de 12 bits (0-4095)
+ * - Vref = 3.3 V
+ *************************************************/
 float get_celsius(void){
 
 	get_temp_vref(&direct_temp);
 
 	//float V_sense = get_vsense();
 
-	    // 2) Obtener voltaje del sensor
-	float V_sense = (direct_temp * 3.3) / 4096.0f;
+	//Obtener voltaje del sensor
+	float V_sense = (direct_temp * 3.3) / 4095.0f;
 
-	    // 3) Aplicar fórmula del datasheet
-	    //    V_25 = 1.43 V, Avg_Slope = 4.3 mV/°C
+	//Calcular la temperatura en Celsius
     float temperatura = ((1.43f - V_sense) / 0.0043f) + 25.0f;
+
     return temperatura;
 
 }
