@@ -6,38 +6,6 @@
 
 uint16_t direct_temp = 0;
 
-void send_temp(void){
-
-
-	float temp =  get_celsius();
-	char temp_str[32], final_str[40];
-
-	float_to_str(temp, temp_str, 2);
-
-	int len = 0;
-
-	while (temp_str[len] != '\0') {
-
-		final_str[len] = temp_str[len];
-	    len++;
-	}
-
-	final_str[len++] = '\r';  // agrega \r
-	final_str[len++] = '\n';  // agrega \n
-	final_str[len] = '\0';    // fin de cadena
-
-	transmit_string(final_str);
-
-}
-
-void get_temp_vref(uint16_t* direct_temp){
-
-	//Se escribe la lectura del canal 16 en la variable direct_temp
-	while(!(ADC1_SR & (1 << 1)));
-	*direct_temp = (uint16_t)ADC1_DR;
-
-}
-
 /**************************************************
  * Esta función convierte el valor crudo leído del ADC
  * (sensor interno de temperatura) a un voltaje, y luego
@@ -64,6 +32,38 @@ float get_celsius(void){
     float temperatura = ((1.43f - V_sense) / 0.0043f) + 25.0f;
 
     return temperatura;
+
+}
+
+void get_temp_vref(uint16_t* direct_temp){
+
+	//Se escribe la lectura del canal 16 en la variable direct_temp
+	while(!(ADC1_SR & (1 << 1)));
+	*direct_temp = (uint16_t)ADC1_DR;
+
+}
+
+void send_temp(void){
+
+
+	float temp =  get_celsius();
+	char temp_str[32], final_str[40];
+
+	float_to_str(temp, temp_str, 2);
+
+	int len = 0;
+
+	while (temp_str[len] != '\0') {
+
+		final_str[len] = temp_str[len];
+	    len++;
+	}
+
+	final_str[len++] = '\r';  // agrega \r
+	final_str[len++] = '\n';  // agrega \n
+	final_str[len] = '\0';    // fin de cadena
+
+	transmit_string(final_str);
 
 }
 
