@@ -32,35 +32,25 @@ void send_temp(void){
 
 void get_temp_vref(uint16_t* direct_temp){
 
-	//Inicia conversion SWSTART
-	//ADC1_CR2 |= (1U << 22);
-
 	//Se escribe la lectura del canal 16 en la variable direct_temp
 	while(!(ADC1_SR & (1 << 1)));
 	*direct_temp = (uint16_t)ADC1_DR;
-
-
 
 }
 
 float get_celsius(void){
 
-
-
 	get_temp_vref(&direct_temp);
-
 
 	float V_sense = get_vsense();
 
 	    // 2) Obtener voltaje del sensor
-	//float V_sense = ((float)direct_temp * Vdda) / 4096.0f;
+	//float V_sense = (direct_temp * 3.3) / 4096.0f;
 
 	    // 3) Aplicar fórmula del datasheet
 	    //    V_25 = 1.43 V, Avg_Slope = 4.3 mV/°C
     float temperatura = ((1.43f - V_sense) / 0.0043f) + 25.0f;
     return temperatura;
-
-
 
 }
 
