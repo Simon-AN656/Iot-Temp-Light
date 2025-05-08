@@ -16,12 +16,8 @@ void EXTI1_IRQHandler (void){
 		EXTI_PR |= (1U << 1);    // limpiar flag
 		transmit_string("MCU Temperature: ");
 	    send_temp();
-	   // transmit_string("VDDA: ");
-	    //send_vdda();
 	    transmit_string("V_SENSE: ");
 	    send_vsense();
-	    //transmit_string("Direct VREFINT: ");
-	    //send_dvref();
 	    transmit_string("Direct temp: ");
 	    send_dtemp();
 
