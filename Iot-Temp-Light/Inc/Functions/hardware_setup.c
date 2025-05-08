@@ -48,30 +48,21 @@ void init_adc(void){
 
 	//Calibracion del sensor
 	ADC1_CR2 |= (1U << 2);
-	while (ADC1_CR2 & (1U << 2)); //Bucle de espera a la terminacion de CAL
+	//Bucle de espera a la terminacion de CAL
+	while (ADC1_CR2 & (1U << 2));
 
 	ADC1_CR2 &= ~(1U << 20);
+	//Se habilitan converisones continuas
 	ADC1_CR2 |= (1U << 1);
 
-	//ADC1_CR1 &= ~(1U << 8);
-
-	//Habilita 2 converisones
+	//Configuracion de 1 conversion
 	ADC1_SQR1 &= ~(0xFU << 20);
-	//ADC1_SQR1 |= (0x1U << 20);
-
 
 	//Configura sample time largo para canal 16
 	ADC1_SMPR1 &= ~(0x7U << 18);
-	ADC1_SMPR1 |= (0x7U << 18);  // channel 16
+	ADC1_SMPR1 |= (0x7U << 18);
 
-	// Canal 17 (VREFINT)
-	//ADC1_SMPR1 &= ~(0x7U << 21); // Limpia bits
-	//ADC1_SMPR1 |= (0x7U << 21);  // Tiempo de muestreo máximo
-
-	//Modo SCAN
-	//ADC1_CR1 |= (1U << 8); // Habilita el modo de escaneo
-
-	// Configura SQ1 = canal 16, SQ2 = canal 17
+	// Configura SQ1 = canal 16
 	ADC1_SQR3 = (16U << 0);
 
 	ADC1_SR = 0;
