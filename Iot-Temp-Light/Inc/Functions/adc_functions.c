@@ -42,10 +42,10 @@ float get_celsius(void){
 
 	get_temp_vref(&direct_temp);
 
-	float V_sense = get_vsense();
+	//float V_sense = get_vsense();
 
 	    // 2) Obtener voltaje del sensor
-	//float V_sense = (direct_temp * 3.3) / 4096.0f;
+	float V_sense = (direct_temp * 3.3) / 4096.0f;
 
 	    // 3) Aplicar fórmula del datasheet
 	    //    V_25 = 1.43 V, Avg_Slope = 4.3 mV/°C
@@ -95,7 +95,7 @@ void float_to_str(float val, char *buffer, int prec) {
 }
 
 
-float get_vsense(void){
+/*float get_vsense(void){
 
 	float V_sense = (direct_temp * 3.3) / 4096.0f;
 
@@ -127,29 +127,6 @@ void send_dtemp(void){
 
 }
 
-void send_vdda(void){
-
-
-	float send_va =  get_celsius();
-	char va_str[32], final_str[40];
-
-	float_to_str(send_va, va_str, 2);
-
-	int len = 0;
-
-	while (va_str[len] != '\0') {
-
-		final_str[len] = va_str[len];
-	    len++;
-	}
-
-	final_str[len++] = '\r';  // agrega \r
-	final_str[len++] = '\n';  // agrega \n
-	final_str[len] = '\0';    // fin de cadena
-
-	transmit_string(final_str);
-
-}
 
 void send_vsense(void){
 
@@ -173,4 +150,4 @@ void send_vsense(void){
 
 	transmit_string(final_str);
 
-}
+}*/
