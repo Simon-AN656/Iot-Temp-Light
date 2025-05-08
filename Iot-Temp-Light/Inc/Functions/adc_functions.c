@@ -23,8 +23,6 @@ float get_celsius(void){
 
 	get_temp_vref(&direct_temp);
 
-	//float V_sense = get_vsense();
-
 	//Obtener voltaje del sensor
 	float V_sense = (direct_temp * 3.3) / 4095.0f;
 
@@ -106,61 +104,3 @@ void float_to_str(float val, char *buffer, int prec) {
 
     *p = '\0';  // Fin de string
 }
-
-
-/*float get_vsense(void){
-
-	float V_sense = (direct_temp * 3.3) / 4096.0f;
-
-	return V_sense;
-
-}
-
-void send_dtemp(void){
-
-
-	float temp =  direct_temp;
-	char temp_str[32], final_str[40];
-
-	float_to_str(temp, temp_str, 2);
-
-	int len = 0;
-
-	while (temp_str[len] != '\0') {
-
-		final_str[len] = temp_str[len];
-	    len++;
-	}
-
-	final_str[len++] = '\r';  // agrega \r
-	final_str[len++] = '\n';  // agrega \n
-	final_str[len] = '\0';    // fin de cadena
-
-	transmit_string(final_str);
-
-}
-
-
-void send_vsense(void){
-
-
-	float send_ve =  get_celsius();
-	char ve_str[32], final_str[40];
-
-	float_to_str(send_ve, ve_str, 2);
-
-	int len = 0;
-
-	while (ve_str[len] != '\0') {
-
-		final_str[len] = ve_str[len];
-	    len++;
-	}
-
-	final_str[len++] = '\r';  // agrega \r
-	final_str[len++] = '\n';  // agrega \n
-	final_str[len] = '\0';    // fin de cadena
-
-	transmit_string(final_str);
-
-}*/
